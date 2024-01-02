@@ -14,18 +14,18 @@ jobs:
       - run: |
           echo "Installing dependencies..."
           npm install
-test:
-  docker:
-    - image: cimg/node:16.10
-  steps:
-    - checkout
-    - node/install-packages:
-        pkg-manager: npm
-    - run: |
-        echo "Running tests..."
-        npm run test
+  test:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run: |
+          echo "Running tests..."
+          npm run test
   optional_publish:
-    # Assignment
+      # Assignment
 
 workflows:
   simple_workflow:
