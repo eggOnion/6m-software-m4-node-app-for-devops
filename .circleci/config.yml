@@ -58,7 +58,7 @@ jobs:
       #     image: eggonion/build-and-push:latest
       #     username: $DOCKERHUB_USERNAME
       #     password: $DOCKERHUB_PASSWORD
-      #
+      
 
 workflows:
   simple_workflow:
