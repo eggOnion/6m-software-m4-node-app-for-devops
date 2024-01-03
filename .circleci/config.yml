@@ -2,10 +2,10 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.1
-  docker: circleci/docker@2.4.0
+  # docker: circleci/docker@2.4.0
 
 jobs:
-  build:
+  build_and_publish:
     docker:
       - image: cimg/node:16.10
     steps:
@@ -15,6 +15,15 @@ jobs:
       - run: |
           echo "Installing dependencies...."
           npm install
+      - run:
+          name: Log in to Docker Hub
+          command: echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+      - run:
+          name: Build Docker Image
+          command: docker build -t docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest .
+      - run:
+          name: Push Docker Image
+          command: docker push docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest
   test:
     docker:
       - image: cimg/node:16.10
@@ -28,20 +37,20 @@ jobs:
   optional_publish:
       # Assignment
 
-  publish_docker:
-    docker:
-      - image: cimg/node:16.10
-    steps:
-      - checkout
-      - run:
-          name: Log in to Docker Hub
-          command: echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
-      - run:
-          name: Build Docker Image
-          command: docker build -t docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest .
-      - run:
-          name: Push Docker Image
-          command: docker push docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest
+  # publish_docker:
+  #   docker:
+  #     - image: cimg/node:16.10
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Log in to Docker Hub
+  #         command: echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+  #     - run:
+  #         name: Build Docker Image
+  #         command: docker build -t docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest .
+  #     - run:
+  #         name: Push Docker Image
+  #         command: docker push docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest
 
       # - node/install-packages:
       #     pkg-manager: npm
