@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.1
+  docker: circleci/docker@1.1.8
 
 jobs:
   build:
@@ -12,7 +13,7 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run: |
-          echo "Installing dependencies..."
+          echo "Installing dependencies...."
           npm install
   test:
     docker:
@@ -22,10 +23,33 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run: |
-          echo "Running tests..."
+          echo "Running tests...."
           npm run test
   optional_publish:
       # Assignment
+
+  publish_docker:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - run:
+          name: eggonion/build-and-push:latest
+          command: echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+      - run:
+          name: eggonion/build-and-push:latest
+          command: docker build -t docker.pkg.github.com/eggonion/6m-software-4.5-ci-container/build-and-push:latest .
+      - run:
+          name: eggonion/build-and-push:latest
+          command: docker push docker.pkg.github.com/eggonion/6m-software-4.5-ci-container/build-and-push:latest
+
+      # - node/install-packages:
+      #     pkg-manager: npm
+      # - docker/publish:
+      #     name: build-and-push
+      #     image: eggonion/build-and-push:latest
+      #     username: $DOCKERHUB_USERNAME
+      #     password: $DOCKERHUB_PASSWORD
 
 workflows:
   simple_workflow:
