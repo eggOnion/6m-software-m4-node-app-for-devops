@@ -15,14 +15,19 @@ jobs:
       - run: |
           echo "Installing dependencies...."
           npm install
-      - run:
-          name: Log in to Docker Hub
-          command: echo "$DOCKERHUB_TOKEN" | docker login -u "DOCKERHUB_USERNAME" --password-stdin
+      # - run:
+      #     name: Log in to Docker Hub
+      #     command: echo "$DOCKERHUB_TOKEN" | docker login -u "DOCKERHUB_USERNAME" --password-stdin
+      - image: eggonion/build-and-push:latest
+        auth:
+          username: eggonion
+          password: $DOCKERHUB_TOKEN
       - run:
           name: Build and Push Docker Image
           command: |
             docker build -t eggonion/build-and-push:latest .
             docker push eggonion/build-and-push:latest
+
   test:
     docker:
       - image: cimg/node:16.10
