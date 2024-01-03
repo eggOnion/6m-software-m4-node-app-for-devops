@@ -34,14 +34,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: eggonion/build-and-push:latest
+          name: Log in to Docker Hub
           command: echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
       - run:
-          name: eggonion/build-and-push:latest
-          command: docker build -t docker.pkg.github.com/eggonion/6m-software-4.5-ci-container/build-and-push:latest .
+          name: Build Docker Image
+          command: docker build -t docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest .
       - run:
-          name: eggonion/build-and-push:latest
-          command: docker push docker.pkg.github.com/eggonion/6m-software-4.5-ci-container/build-and-push:latest
+          name: Push Docker Image
+          command: docker push docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest
 
       # - node/install-packages:
       #     pkg-manager: npm
