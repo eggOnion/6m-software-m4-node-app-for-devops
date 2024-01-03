@@ -16,8 +16,8 @@ jobs:
           echo "Installing dependencies...."
           npm install
       - run:
-          name: Log in to Docker Hub
-          command: echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+          name: Log in to Docker Hub using GitHub Token
+          command: echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
       - run:
           name: Build Docker Image
           command: docker build -t docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest .
