@@ -82,6 +82,6 @@ workflows:
       - publish:
           requires:
             - test
-      - pull-and-deploy:
+      - deploy:
           requires:
             - publish
