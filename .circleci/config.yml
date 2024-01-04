@@ -29,18 +29,18 @@ jobs:
       # - run:
       #    name: Log in to Docker Hub
       #    command: echo "$DOCKERHUB_TOKEN" | docker login -u "DOCKERHUB_USERNAME" --password-stdin 
-  publish:
-    executor: docker/docker
-    steps:
-      - setup_remote_docker
-      - checkout
-      - docker/check
-      - docker/build:
-          image: weicong/education-space
-          tag: v2.0.1
-      - docker/push:
-          image: weicong/education-space
-          tag: v2.0.1
+  # publish:
+  #   executor: docker/docker
+  #   steps:
+  #     - setup_remote_docker
+  #     - checkout
+  #     - docker/check
+  #     - docker/build:
+  #         image: weicong/education-space
+  #         tag: v2.0.1
+  #     - docker/push:
+  #         image: weicong/education-space
+  #         tag: v2.0.1
   deploy:
     docker:
       - image: cimg/node:16.10
