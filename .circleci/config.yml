@@ -25,33 +25,48 @@ jobs:
           pkg-manager: npm
       - run: |
           echo "Running tests..."
-          npm run test
-  optional_publish:
-      # Assignment
-  
-  build-and-push:
+          npm test
+  publish:
     executor: docker/docker
     steps:
       - setup_remote_docker
       - checkout
       - docker/check
       - docker/build:
-          image: edisonzsq/education-space
+          image: weicong/education-space
+          tag: v2.0.1
       - docker/push:
-          image: edisonzsq/education-space
-
-  deploy:
+          image: weicong/education-space
+          tag: v2.0.1
+  # deploy:
+  #   docker:
+  #     - image: cimg/node:16.10
+  #   steps:
+  #     - setup_remote_docker
+  #     - checkout
+  #     - heroku/install
+  #     - run:
+  #         name: Heroku Container Push
+  #         command: |
+  #             heroku container:login
+  #             heroku container:push web -a weicong-su-devops
+  #             heroku container:release web -a weicong-su-devops
+  pull-and-deploy:
     docker:
       - image: cimg/node:16.10
     steps:
       - setup_remote_docker
-      - checkout
       - heroku/install
+      - docker/pull:
+          images: weicong/education-space:v2.0.1
       - run:
-          name: Heroku Container Push
+          name: Heroku Container Push With Image From Docker Hub
           command: |
               heroku container:login
-              heroku container:push web -a weicong-su-devops
+              docker tag weicong/education-space:v2.0.1 registry.heroku.com/weicong-su-devops/web
+              # format --- docker tag <image name from docker hub> registry.heroku.com/<app-name>/web
+              docker push registry.heroku.com/weicong-su-devops/web
+              # format --- docker push registry.heroku.com/<app-name>/web
               heroku container:release web -a weicong-su-devops
 
 workflows:
@@ -60,4 +75,10 @@ workflows:
       - build
       - test:
           requires:
-            - build  
+            - build
+      - publish:
+          requires:
+            - test
+      - pull-and-deploy:
+          requires:
+            - publish
