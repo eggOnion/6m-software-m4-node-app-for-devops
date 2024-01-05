@@ -9,62 +9,34 @@ jobs:
     docker:
       - image: cimg/node:16.10
     steps:
+      - checkout      
+      - node/install-packages:
+          pkg-manager: npm
+      - run: |
+          echo "Installing dependencies...."
+          npm install 
+          
+  test:
+    docker:
+      - image: cimg/node:16.10
+    steps:
       - checkout
       - setup_remote_docker
       - node/install-packages:
           pkg-manager: npm
       - run: |
-          echo "Installing dependencies...."
-          npm install
+          echo "Running tests...."
+          npm run test
       - run:
           name: Log in to Docker Hub
           command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
       - run:
           name: Build and Push Docker Image
           command: |
-            docker build -t $DOCKERHUB_USERNAME/build-and-push:latest .
-            docker push $DOCKERHUB_USERNAME/build-and-push:latest
-  test:
-    docker:
-      - image: cimg/node:16.10
-    steps:
-      - checkout
-      - node/install-packages:
-          pkg-manager: npm
-      - run: |
-          echo "Running tests...."
-          npm run test
-      # - run:
-      #     name: Build and Push Docker Image
-      #     command: |
-      #       docker build -t $DOCKERHUB_USERNAME/build-and-push:latest .
-      #       docker push $DOCKERHUB_USERNAME/build-and-push:latest
+            docker build -t $DOCKERHUB_USERNAME/build-and-push:latest_v1 .
+            docker push $DOCKERHUB_USERNAME/build-and-push:latest_v1
   optional_publish:
-      # Assignments
-
-  # publish_docker:
-  #   docker:
-  #     - image: cimg/node:16.10
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Log in to Docker Hub
-  #         command: echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
-  #     - run:
-  #         name: Build Docker Image
-  #         command: docker build -t docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest .
-  #     - run:
-  #         name: Push Docker Image
-  #         command: docker push docker.pkg.github.com/eggOnion/6m-software-4.5-ci-container/eggonion/build-and-push:latest
-
-      # - node/install-packages:
-      #     pkg-manager: npm
-      # - docker/publish:
-      #     name: build-and-push
-      #     image: eggonion/build-and-push:latest
-      #     username: $DOCKERHUB_USERNAME
-      #     password: $DOCKERHUB_PASSWORD
-      #      
+      # Assignment
 
 workflows:
   simple_workflow:
