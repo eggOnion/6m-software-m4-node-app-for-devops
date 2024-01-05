@@ -1,14 +1,18 @@
 version: 2.1
 
+# orb provides a predfined configurations for a specific environment; node & docker for our case
 orbs:
   node: circleci/node@5.0.1
   docker: circleci/docker@2.1.4
 
+# This job uses a Docker image: "cimg/node:16.10" to build a Node.js application. 
 jobs:
   build:
     docker:
       - image: cimg/node:16.10
     steps:
+      ## This checkout command fetch the source code once the commit is executed on Github.
+      ## It then continue to installs npm packages, and runs the npm install command.
       - checkout      
       - node/install-packages:
           pkg-manager: npm
@@ -16,6 +20,10 @@ jobs:
           echo "Installing dependencies...."
           npm install 
           
+  # This job also uses a Docker image (cimg/node:16.10). 
+  # The checkout command command fetch the source code once the commit is executed on Github.
+  # !!* Sets up remote Docker -> allows the Docker command to run in circleci
+  # installs npm packages, runs tests using npm run test
   test:
     docker:
       - image: cimg/node:16.10
@@ -33,11 +41,15 @@ jobs:
       - run:
           name: Build and Push Docker Image
           command: |
-            docker build -t $DOCKERHUB_USERNAME/build-and-push:latest_v1 .
-            docker push $DOCKERHUB_USERNAME/build-and-push:latest_v1
+            docker build -t $DOCKERHUB_USERNAME/build-and-push:latest_v2 .
+            docker push $DOCKERHUB_USERNAME/build-and-push:latest_v2
   optional_publish:
       # Assignment
 
+# workflows: simple_workflow  -> *the name of the workflow
+# This workflow consists of two jobs: build and test. 
+# The test job "requires" the build job to complete successfully before it can run. 
+# This represents a basic CI/CD workflow where the application is built and tested.
 workflows:
   simple_workflow:
     jobs:
@@ -45,3 +57,7 @@ workflows:
       - test:
           requires:
             - build  
+
+# In summary, this CircleCI configuration defines a basic workflow for a Node.js application, involving 
+# building and testing using Docker images. The success of the workflow depends on the successful completion 
+# of the build job before the test job can run
