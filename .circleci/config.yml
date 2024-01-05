@@ -23,8 +23,8 @@ jobs:
           command: |
             sudo service docker status
             sudo service docker start
-            sudo docker build -t $DOCKERHUB_USERNAME/build-and-push:latest .
-            sudo docker push $DOCKERHUB_USERNAME/build-and-push:latest
+            docker build -t $DOCKERHUB_USERNAME/build-and-push:latest .
+            docker push $DOCKERHUB_USERNAME/build-and-push:latest
 
   test:
     docker:
