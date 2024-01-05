@@ -35,7 +35,7 @@ jobs:
           echo "Running tests...."
           npm run test
   optional_publish:
-      # Assignment
+      # Assignments
 
   # publish_docker:
   #   docker:
