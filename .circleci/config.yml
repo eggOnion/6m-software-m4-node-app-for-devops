@@ -22,8 +22,8 @@ jobs:
           name: Build and Push Docker Image
           command: |
             sudo service docker start
-            docker build -t eggonion/build-and-push:latest .
-            docker push eggonion/build-and-push:latest
+            docker build -t $DOCKERHUB_USERNAME/build-and-push:latest .
+            docker push $DOCKERHUB_USERNAME/build-and-push:latest
 
   test:
     docker:
