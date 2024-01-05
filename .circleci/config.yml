@@ -17,13 +17,7 @@ jobs:
           npm install
       - run:
           name: Log in to Docker Hub
-          command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin     
-      - run:
-          name: Build and Push Docker Image
-          command: |
-            docker build -t $DOCKERHUB_USERNAME/build-and-push:latest .
-            docker push $DOCKERHUB_USERNAME/build-and-push:latest
-
+          command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
   test:
     docker:
       - image: cimg/node:16.10
@@ -34,6 +28,11 @@ jobs:
       - run: |
           echo "Running tests...."
           npm run test
+      - run:
+          name: Build and Push Docker Image
+          command: |
+            docker build -t $DOCKERHUB_USERNAME/build-and-push:latest .
+            docker push $DOCKERHUB_USERNAME/build-and-push:latest
   optional_publish:
       # Assignments
 
@@ -59,8 +58,7 @@ jobs:
       #     image: eggonion/build-and-push:latest
       #     username: $DOCKERHUB_USERNAME
       #     password: $DOCKERHUB_PASSWORD
-      #
-      
+      #      
 
 workflows:
   simple_workflow:
