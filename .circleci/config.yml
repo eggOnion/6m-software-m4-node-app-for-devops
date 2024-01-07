@@ -59,6 +59,7 @@ jobs:
 # This represents a basic CI/CD workflow where the application is built and tested.
 workflows:
   simple_workflow:  
+  build-and-push_on_tag:
     jobs:
       - build:
           filters: 
