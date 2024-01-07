@@ -68,9 +68,7 @@ workflows:
       - test:
           requires:
             - build    
-      - build-and-push:
-          requires:
-            - test
+      - build-and-push:               
           filters:
             tags:
               only: /^v1\.0\.5/     # enfore git tag to match this version
