@@ -34,7 +34,16 @@ jobs:
           pkg-manager: npm
       - run: |
           echo "Running tests...."
-          npm run test
+          npm run test      
+  optional_publish:
+      # Assignment
+
+  build-and-push:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - setup_remote_docker      
       - run:
           name: Log in to Docker Hub
           command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
@@ -43,32 +52,37 @@ jobs:
           command: |
             docker build -t $DOCKERHUB_USERNAME/build-and-push:latest_v2 .
             docker push $DOCKERHUB_USERNAME/build-and-push:latest_v2
-  optional_publish:
-      # Assignment
 
 # workflows: simple_workflow  -> *the name of the workflow
 # This workflow consists of two jobs: build and test. 
 # The test job "requires" the build job to complete successfully before it can run. 
 # This represents a basic CI/CD workflow where the application is built and tested.
 workflows:
+  simple_workflow:  
+    jobs:
+      - build:
+          filters: 
+            branches:     
+              only:
+                - main      # build the ci pipeline only when git push to main branch            
+      - test:
+          requires:
+            - build      
+    # - deploy:
+    #     requires:
+    #       - test
+
+build_and_push_workflow:
   simple_workflow:
-    build_on_tag:
-      jobs:
-        - build:
-            filters: 
-              branches:     
-                only:
-                  - main      # build the ci pipeline only when git push to main branch
-              tags:
-                only:
-                  - /^latest_v[2]+\.[0]+\.[1]+$/ 
-        - test:
-            requires:
-              - build
-      # - deploy:
-      #     requires:
-      #       - test
-           
+  build_on_tag:
+    jobs:
+      - build_and_push:
+          requires:
+            - build:
+                filters:
+                  tags:
+                    only: /^latest_v[2]+\.[0]+\.[1]+$/      # enfore git tag to match this version
+         
 
 
 
