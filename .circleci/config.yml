@@ -67,16 +67,21 @@ workflows:
                 - main      # build the ci pipeline only when git push to main branch            
       - test:
           requires:
-            - build
+            - build      
+    # - deploy:
+    #     requires:
+    #       - test
+
+build_and_push_workflow:
+  simple_workflow:
+  build_on_tag:
+    jobs:
       - build_and_push:
           requires:
             - build:
                 filters:
                   tags:
                     only: /^latest_v[2]+\.[0]+\.[1]+$/      # enfore git tag to match this version
-    # - deploy:
-    #     requires:
-    #       - test
          
 
 
