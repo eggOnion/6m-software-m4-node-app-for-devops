@@ -7,10 +7,7 @@ orbs:
 
 # This job uses a Docker image: "cimg/node:16.10" to build a Node.js application. 
 jobs:
-  build:
-    branches:
-      only:
-        - main     
+  build:   
     docker:
       - image: cimg/node:16.10
     steps:
@@ -57,6 +54,10 @@ workflows:
   simple_workflow:
     jobs:
       - build
+        filters:
+            branches:
+              only:
+                - main
       - test:
           requires:
             - build
