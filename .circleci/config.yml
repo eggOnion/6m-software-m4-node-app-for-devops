@@ -61,11 +61,11 @@ workflows:
   simple_workflow:  
   build-and-push_on_tag:
     jobs:
-      - build:
-          filters: 
-            branches:     
-              only:
-                - main      # build the ci pipeline only when git push to main branch            
+      - build
+          # filters: 
+            # branches:     
+              # only:
+                # - main      # build the ci pipeline only when git push to main branch            
       - test:
           requires:
             - build    
