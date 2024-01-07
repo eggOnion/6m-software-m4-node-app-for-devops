@@ -73,8 +73,7 @@ workflows:
             - build:
                 filters:
                   tags:
-                    only: 
-                      - /^latest_v[2]+\.[0]+\.[1]+$/      # enfore git tag to match this version
+                    only: /^latest_v[2]+\.[0]+\.[1]+$/      # enfore git tag to match this version
     # - deploy:
     #     requires:
     #       - test
