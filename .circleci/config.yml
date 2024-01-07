@@ -72,9 +72,9 @@ workflows:
       - build-and-push:
           requires:
               - build:
-                  filters:
-                    tags:
-                      only: /^latest_v[2]+\.[0]+\.[1]+$/      # enfore git tag to match this version
+          filters:
+            tags:
+              only: /^latest_v[2]+\.[0]+\.[1]+$/      # enfore git tag to match this version
     # - deploy:
     #     requires:
     #       - test
