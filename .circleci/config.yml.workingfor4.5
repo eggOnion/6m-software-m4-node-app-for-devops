@@ -56,13 +56,7 @@ workflows:
       - build
       - test:
           requires:
-            - build
-                filters:
-                  branches:
-                    only:
-                      - main
-                      
-                                
+            - build  
 
 # In summary, this CircleCI configuration defines a basic workflow for a Node.js application, involving 
 # building and testing using Docker images. The success of the workflow depends on the successful completion 
