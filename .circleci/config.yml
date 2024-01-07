@@ -36,7 +36,7 @@ jobs:
           echo "Running tests...."
           npm run test      
   optional_publish:
-      # Assignment
+      # Assignments
 
   build-and-push:
     docker:
@@ -48,7 +48,7 @@ jobs:
           name: Log in to Docker Hub
           command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
       - run:
-          name: Build and Push Docker Image
+          name: Build and Push Docker Image.
           command: |
             docker build -t $DOCKERHUB_USERNAME/build-and-push:latest_v2 .
             docker push $DOCKERHUB_USERNAME/build-and-push:latest_v2
@@ -95,4 +95,4 @@ workflows:
 
 # In summary, this CircleCI configuration defines a basic workflow for a Node.js application, involving 
 # building and testing using Docker images. The success of the workflow depends on the successful completion 
-# of the build job before the test job can run.
+# of the build job before the test job can run...
