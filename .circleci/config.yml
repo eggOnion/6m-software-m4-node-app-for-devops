@@ -55,9 +55,9 @@ workflows:
     jobs:
       - build:
           filters: 
-            branches:     
-              only:
-                - main      # build the ci pipeline only when git push to main branch
+            #branches:     
+            #  only:
+            #    - main      # build the ci pipeline only when git push to main branch
             tags:
               only:
                 - /^latest_v[2]+\.[0]+\.[1]+$/ 
