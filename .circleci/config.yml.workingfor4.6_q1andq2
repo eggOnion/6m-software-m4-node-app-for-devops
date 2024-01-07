@@ -34,16 +34,7 @@ jobs:
           pkg-manager: npm
       - run: |
           echo "Running tests...."
-          npm run test      
-  optional_publish:
-      # Assignment
-
-  build-and-push:
-    docker:
-      - image: cimg/node:16.10
-    steps:
-      - checkout
-      - setup_remote_docker      
+          npm run test
       - run:
           name: Log in to Docker Hub
           command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
@@ -52,6 +43,8 @@ jobs:
           command: |
             docker build -t $DOCKERHUB_USERNAME/build-and-push:latest_v2 .
             docker push $DOCKERHUB_USERNAME/build-and-push:latest_v2
+  optional_publish:
+      # Assignment
 
 # workflows: simple_workflow  -> *the name of the workflow
 # This workflow consists of two jobs: build and test. 
@@ -75,9 +68,7 @@ workflows:
     # - deploy:
     #     requires:
     #       - test
-         
-
-
+    
 
 # In summary, this CircleCI configuration defines a basic workflow for a Node.js application, involving 
 # building and testing using Docker images. The success of the workflow depends on the successful completion 
