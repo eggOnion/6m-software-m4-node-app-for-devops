@@ -71,7 +71,7 @@ workflows:
             - build    
       - build-and-push:
           requires:
-              - build:
+            - build
           filters:
             tags:
               only: /^latest_v[2]+\.[0]+\.[1]+$/      # enfore git tag to match this version
