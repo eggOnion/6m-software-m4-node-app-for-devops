@@ -59,7 +59,6 @@ jobs:
 # This represents a basic CI/CD workflow where the application is built and tested.
 workflows:
   simple_workflow:  
-    build_on_tag:
     jobs:
       - build:
           filters: 
@@ -74,7 +73,7 @@ workflows:
             - test
           filters:
             tags:
-              only: /^v1+\.0+\.2+$/      # enfore git tag to match this version
+              only: /^v1+\.0+\.3+$/      # enfore git tag to match this version
     # - deploy:
     #     requires:
     #       - test
@@ -95,4 +94,4 @@ workflows:
 
 # In summary, this CircleCI configuration defines a basic workflow for a Node.js application, involving 
 # building and testing using Docker images. The success of the workflow depends on the successful completion 
-# of the build job before the test job can run...
+# of the build job before the test job can run.
