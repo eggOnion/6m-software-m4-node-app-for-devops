@@ -52,21 +52,22 @@ jobs:
 # This represents a basic CI/CD workflow where the application is built and tested.
 workflows:
   simple_workflow:
-    jobs:
-      - build:
-          filters: 
-            #branches:     
-            #  only:
-            #    - main      # build the ci pipeline only when git push to main branch
-            tags:
-              only:
-                - /^latest_v[2]+\.[0]+\.[1]+$/ 
-      - test:
-          requires:
-            - build
-    # - deploy:
-    #     requires:
-    #       - test
+    build_on_tag:
+      jobs:
+        - build:
+            filters: 
+              branches:     
+                only:
+                  - main      # build the ci pipeline only when git push to main branch
+              tags:
+                only:
+                  - /^latest_v[2]+\.[0]+\.[1]+$/ 
+        - test:
+            requires:
+              - build
+      # - deploy:
+      #     requires:
+      #       - test
            
 
 
