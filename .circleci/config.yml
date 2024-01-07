@@ -51,7 +51,8 @@ jobs:
 # The test job "requires" the build job to complete successfully before it can run. 
 # This represents a basic CI/CD workflow where the application is built and tested.
 workflows:
-  simple_workflow:
+  simple_workflow:   
+  build_on_tag:
     jobs:
       - build:
           filters: 
@@ -60,17 +61,17 @@ workflows:
                 - main      # build the ci pipeline only when git push to main branch
             tags:
               only:
-                - /^latest_v[2]+\.[0]+\.[1]+$/ 
+                - /^latest_v[2]+\.[0]+\.[1]+$/      # enfore git tag to match this version
       - test:
           requires:
             - build
-      # - deploy:
-      #     requires:
-      #       - test
-           
+    # - deploy:
+    #     requires:
+    #       - test
+         
 
 
 
 # In summary, this CircleCI configuration defines a basic workflow for a Node.js application, involving 
 # building and testing using Docker images. The success of the workflow depends on the successful completion 
-# of the build job before the test job can run
+# of the build job before the test job can run.
