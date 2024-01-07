@@ -54,7 +54,7 @@ workflows:
   simple_workflow:
     jobs:
       - build
-        filters:
+          filters: 
             branches:
               only:
                 - main
