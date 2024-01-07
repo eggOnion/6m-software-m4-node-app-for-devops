@@ -60,11 +60,11 @@ jobs:
 workflows:
   simple_workflow:    
     jobs:
-      - build
-    filters: 
-      branches:     
-        only:
-          - main      # build the ci pipeline only when git push to main branch            
+      - build:
+          filters: 
+            branches:     
+              only:
+                - main      # build the ci pipeline only when git push to main branch            
       - test:
           requires:
             - build    
