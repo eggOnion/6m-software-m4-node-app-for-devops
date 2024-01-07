@@ -26,9 +26,9 @@ jobs:
       - run: |
           echo "Running tests..."
           npm test
-      # - run:
-      #    name: Log in to Docker Hub
-      #    command: echo "$DOCKERHUB_TOKEN" | docker login -u "DOCKERHUB_USERNAME" --password-stdin 
+    # - run:
+    #    name: Log in to Docker Hub
+    #    command: echo "$DOCKERHUB_TOKEN" | docker login -u "DOCKERHUB_USERNAME" --password-stdin 
   # publish:
   #   executor: docker/docker
   #   steps:
