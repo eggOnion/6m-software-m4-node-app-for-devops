@@ -28,8 +28,7 @@ jobs:
     docker:
       - image: cimg/node:16.10
     steps:
-      - checkout
-      - setup_remote_docker
+      - checkout      
       - node/install-packages:
           pkg-manager: npm
       - run: |
@@ -38,29 +37,26 @@ jobs:
   optional_publish:
       # Assignments
 
-  # Specify your tag pattern using wildcards
-  build-and-push:
+  semantic-version-check:
     docker:
       - image: cimg/node:16.10
     steps:
-      - checkout
+      - checkout   
       - run:
-          name: Check for git tag Semantic Versioning
+          name: Check for Semantic Versioning
           command: |
             if [ "$(git describe --exact-match --tags 2>/dev/null)" ]; then
-              echo "Git tag found. Proceeding with the build..."
+                echo "Git tag found. Proceeding with the build..."
             else
               echo "No Git tag found. Exiting..."
               circleci step halt
             fi
-          # Condition to check for wildcard on git tag version
-            # TAG_PATTERN="v10.0.0"  
-            # if git tag -l $TAG_PATTERN 2>/dev/null; then
-            #   echo "Git tag matching pattern found. Proceeding with the build..."
-            # else
-            #   echo "No Git tag matching pattern found. Exiting..."
-            #   circleci step halt
-            # fi      
+
+  build-and-push:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout            
       - setup_remote_docker      
       - run:
           name: Log in to Docker Hub
@@ -94,15 +90,18 @@ workflows:
                 - main      # build the ci pipeline only when git push to main branch            
       - test:
           requires:
-            - build    
-      - build-and-push:
+            - build      
+      - semantic-version-check:
           requires:
-            - test           
+            - test
           filters:
             tags:
               only: 
                 #- /.*/ 
                 - /^v10\.0\.0/     # enfore git tag to match this version
+      - build-and-push:
+          requires:
+            - semantic-version-check          
       - deploy-to-Heroku:
           requires:
             - build-and-push
