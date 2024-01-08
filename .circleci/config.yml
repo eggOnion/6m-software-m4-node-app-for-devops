@@ -85,7 +85,7 @@ workflows:
             tags:
               only: 
                 - /^v1\.0\.5/     # enfore git tag to match this version
-      - deploy to Heroku:
+      - deploy-to-Heroku:
           requires:
             - build-and-push
 
