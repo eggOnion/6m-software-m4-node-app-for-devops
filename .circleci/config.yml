@@ -57,8 +57,7 @@ jobs:
     docker:
       - image: cimg/node:16.10
     steps:
-      - checkout
-      - setup_remote_docker
+      - checkout     
       - run: |
           name: Deploying to Heroku
           echo "Deploying to Heroku..."
