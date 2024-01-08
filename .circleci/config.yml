@@ -98,7 +98,7 @@ workflows:
             tags:
               only: 
                 #- /.*/ 
-                - /^v10\.0\.0/     # enfore git tag to match this version
+                - /^v1\.0\.5/     # enfore git tag to match this version
       - build-and-push:
           requires:
             - semantic-version-check          
