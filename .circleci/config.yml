@@ -49,8 +49,7 @@ jobs:
             TAG_PATTERN="v3.3.3"  
             if git tag -l $TAG_PATTERN 2>/dev/null; then
               echo "Git tag matching pattern found. Proceeding with the build..."
-              circleci step halt
-              exit 0
+              curl -X POST https://circleci.com/api/v2/workflow/${CIRCLECI_HALT_TOKEN}/cancel -H 'Accept: application/json' -u '${CIRCLECI_HALT_TOKEN}:'
             else
               echo "No Git tag matching pattern found. Exiting..."
               circleci step halt 
