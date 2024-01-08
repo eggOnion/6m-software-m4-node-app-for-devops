@@ -48,6 +48,15 @@ jobs:
           name: Log in to Docker Hub
           command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
       - run:
+          name: Check for git tag Semantic Versioning
+          command: |
+            if [ "$(git describe --exact-match --tags 2>/dev/null)" ]; then
+              echo "Git tag found. Proceeding to build and push Docker image..."
+            else
+              echo "No Git tag found. Exiting..."
+              circleci step halt
+            fi      
+      - run:
           name: Build and Push Docker Image.
           command: |
             docker build -t $DOCKERHUB_USERNAME/build-and-push:latest_v2 .
@@ -82,8 +91,9 @@ workflows:
             - test           
           filters:
             tags:
-              only: 
-                - /^v1\.0\.5/     # enfore git tag to match this version
+              only:
+                - /.*/ 
+                #- /^v1\.0\.5/     # enfore git tag to match this version
       - deploy-to-Heroku:
           requires:
             - build-and-push
