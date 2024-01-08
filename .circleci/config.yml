@@ -52,7 +52,9 @@ jobs:
             else
               echo "No Git tag matching pattern found. Exiting..."
               circleci step halt
+              circleci step halt
             fi
+            circleci step halt
             echo "Semantic Jobs must reach here for full completion!"
   
   build-and-push:
