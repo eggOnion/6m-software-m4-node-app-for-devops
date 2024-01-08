@@ -38,6 +38,7 @@ jobs:
       # Assignments
 
   # Specify your tag pattern using wildcards
+  # curl -X POST https://https://app.circleci.com/pipelines/github/${DOCKERHUB_USERNAME}/6m-software-m4-node-app-for-devops/128/workflows/${CIRCLE_WORKFLOW_ID}/cancel -H 'Accept: application/json' -u '${CIRCLE_TOKEN}:'
   semantic-version-check:
     docker:
       - image: cimg/node:16.10
@@ -48,8 +49,7 @@ jobs:
           command: |
             TAG_PATTERN="v3.3.3"  
             if git tag -l $TAG_PATTERN 2>/dev/null; then
-              echo "Git tag matching pattern found. Proceeding with the build..."
-          #curl -X POST https://https://app.circleci.com/pipelines/github/${DOCKERHUB_USERNAME}/6m-software-m4-node-app-for-devops/128/workflows/${CIRCLE_WORKFLOW_ID}/cancel -H 'Accept: application/json' -u '${CIRCLE_TOKEN}:'
+              echo "Git tag matching pattern found. Proceeding with the build..."         
             else
               echo "No Git tag matching pattern found. Exiting..."
               circleci step halt 
