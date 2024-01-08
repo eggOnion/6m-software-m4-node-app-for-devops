@@ -49,14 +49,12 @@ jobs:
             TAG_PATTERN="v3.3.3"  
             if git tag -l $TAG_PATTERN 2>/dev/null; then
               echo "Git tag matching pattern found. Proceeding with the build..."
-              curl -X POST https://https://app.circleci.com/pipelines/github/${DOCKERHUB_USERNAME}/6m-software-m4-node-app-for-devops/128/workflows/${CIRCLE_WORKFLOW_ID}/cancel -H 'Accept: application/json' -u '${CIRCLE_TOKEN}:'
+          #curl -X POST https://https://app.circleci.com/pipelines/github/${DOCKERHUB_USERNAME}/6m-software-m4-node-app-for-devops/128/workflows/${CIRCLE_WORKFLOW_ID}/cancel -H 'Accept: application/json' -u '${CIRCLE_TOKEN}:'
             else
               echo "No Git tag matching pattern found. Exiting..."
               circleci step halt 
               exit 0          
-            fi     
-            circleci step halt
-            exit 0       
+            fi                
       - run:
           name: Semantic version check completed!  
           command: echo "Check completed! Procceing to build-and-push"      
