@@ -59,9 +59,9 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      -run:
-        - name: Deploying to Heroku
-        - command: echo "Deploying to Heroku..."
+      - run: |
+          name: Deploying to Heroku
+          echo "Deploying to Heroku..."
 
 # workflows: simple_workflow  -> *the name of the workflow
 # This workflow consists of two jobs: build and test. 
@@ -93,4 +93,4 @@ workflows:
 
 # In summary, this CircleCI configuration defines a basic workflow for a Node.js application, involving 
 # building and testing using Docker images. The success of the workflow depends on the successful completion 
-# of the build job before the test job can run
+# of the build job before the test job can run.
