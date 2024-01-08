@@ -37,6 +37,7 @@ jobs:
   optional_publish:
       # Assignments
 
+  # Specify your tag pattern using wildcards
   semantic-version-check:
     docker:
       - image: cimg/node:16.10
@@ -45,13 +46,14 @@ jobs:
       - run:
           name: Check for Semantic Versioning
           command: |
-            if [ "$(git describe --exact-match --tags 2>/dev/null)" ]; then
-                echo "Git tag found. Proceeding with the build..."
+            TAG_PATTERN="v1.0.5"  
+            if git tag -l $TAG_PATTERN 2>/dev/null; then
+              echo "Git tag matching pattern found. Proceeding with the build..."
             else
-              echo "No Git tag found. Exiting..."
+              echo "No Git tag matching pattern found. Exiting..."
               circleci step halt
             fi
-
+  
   build-and-push:
     docker:
       - image: cimg/node:16.10
@@ -96,9 +98,8 @@ workflows:
             - test
           filters:
             tags:
-              only: 
-                #- /.*/ 
-                - /^v1\.0\.5/     # enfore git tag to match this version
+              only: /^v1\.0\.5/     # enfore git tag to match this version
+                #- /.*/                  
       - build-and-push:
           requires:
             - semantic-version-check          
