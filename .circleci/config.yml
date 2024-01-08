@@ -38,6 +38,7 @@ jobs:
   optional_publish:
       # Assignments
 
+  # Specify your tag pattern using wildcards
   build-and-push:
     docker:
       - image: cimg/node:16.10
@@ -50,12 +51,13 @@ jobs:
       - run:
           name: Check for git tag Semantic Versioning
           command: |
-            if [ "$(git describe --exact-match --tags 2>/dev/null)" ]; then
-              echo "Git tag found. Proceeding to build and push Docker image..."
+            TAG_PATTERN="v*.*.*"  
+            if git tag -l $TAG_PATTERN 2>/dev/null; then
+              echo "Git tag matching pattern found. Proceeding with the build..."
             else
-              echo "No Git tag found. Exiting..."
+              echo "No Git tag matching pattern found. Exiting..."
               circleci step halt
-            fi      
+            fi
       - run:
           name: Build and Push Docker Image.
           command: |
@@ -91,8 +93,7 @@ workflows:
             - test           
           filters:
             tags:
-              only:
-                - /.*/ 
+              only: /.*/ 
                 #- /^v1\.0\.5/     # enfore git tag to match this version
       - deploy-to-Heroku:
           requires:
