@@ -52,12 +52,12 @@ jobs:
               circleci step halt
             else
               echo "No Git tag matching pattern found. Exiting..."
-              circleci step halt
-           
-            fi
-            circleci step halt
-            echo "Semantic Jobs must reach here for full completion!"
-          name: Semantic Check Completed!
+              circleci step halt           
+            fi     
+            circleci step halt        
+      - run:
+          name: Semantic version check completed!  
+          command: echo "Check completed! Procceing to build-and-push"      
   
   build-and-push:
     docker:
