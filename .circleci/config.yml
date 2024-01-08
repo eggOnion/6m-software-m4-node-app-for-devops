@@ -51,13 +51,22 @@ jobs:
       - run:
           name: Check for git tag Semantic Versioning
           command: |
-            TAG_PATTERN="v10.0.0"  
-            if git tag -l $TAG_PATTERN 2>/dev/null; then
-              echo "Git tag matching pattern found. Proceeding with the build..."
+            if [ "$(git describe --exact-match --tags 2>/dev/null)" ]; then
+              echo "Git tag found. Proceeding with the build..."
             else
-              echo "No Git tag matching pattern found. Exiting..."
+              echo "No Git tag found. Exiting..."
               circleci step halt
             fi
+
+          # Condition to check for wildcard on git tag version
+            # TAG_PATTERN="v10.0.0"  
+            # if git tag -l $TAG_PATTERN 2>/dev/null; then
+            #   echo "Git tag matching pattern found. Proceeding with the build..."
+            # else
+            #   echo "No Git tag matching pattern found. Exiting..."
+            #   circleci step halt
+            # fi            
+        
       - run:
           name: Build and Push Docker Image.
           command: |
