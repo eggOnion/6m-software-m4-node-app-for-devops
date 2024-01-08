@@ -52,6 +52,16 @@ jobs:
           command: |
             docker build -t $DOCKERHUB_USERNAME/build-and-push:latest_v2 .
             docker push $DOCKERHUB_USERNAME/build-and-push:latest_v2
+    
+  deploy-to-Heroku:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - setup_remote_docker
+      -run:
+        - name: Deploying to Heroku
+        - command: echo "Deploying to Heroku..."
 
 # workflows: simple_workflow  -> *the name of the workflow
 # This workflow consists of two jobs: build and test. 
@@ -75,21 +85,9 @@ workflows:
             tags:
               only: 
                 - /^v1\.0\.5/     # enfore git tag to match this version
-    # - deploy:
-    #     requires:
-    #       - test
-
-# build_and_push_workflow:
-#   simple_workflow:
-#   build_on_tag:
-#     jobs:
-#       - build_and_push:
-#           requires:
-#             - build:
-#                 filters:
-#                   tags:
-#                     only: /^latest_v[2]+\.[0]+\.[1]+$/      # enfore git tag to match this version
-         
+      - deploy to Heroku:
+          requires:
+            - build-and-push
 
 
 
