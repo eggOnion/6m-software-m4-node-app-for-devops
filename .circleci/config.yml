@@ -44,10 +44,6 @@ jobs:
       - image: cimg/node:16.10
     steps:
       - checkout
-      - setup_remote_docker      
-      - run:
-          name: Log in to Docker Hub
-          command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
       - run:
           name: Check for git tag Semantic Versioning
           command: |
@@ -57,7 +53,6 @@ jobs:
               echo "No Git tag found. Exiting..."
               circleci step halt
             fi
-
           # Condition to check for wildcard on git tag version
             # TAG_PATTERN="v10.0.0"  
             # if git tag -l $TAG_PATTERN 2>/dev/null; then
@@ -65,8 +60,11 @@ jobs:
             # else
             #   echo "No Git tag matching pattern found. Exiting..."
             #   circleci step halt
-            # fi            
-        
+            # fi      
+      - setup_remote_docker      
+      - run:
+          name: Log in to Docker Hub
+          command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin        
       - run:
           name: Build and Push Docker Image.
           command: |
