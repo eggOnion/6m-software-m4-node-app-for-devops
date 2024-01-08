@@ -50,11 +50,14 @@ jobs:
             if git tag -l $TAG_PATTERN 2>/dev/null; then
               echo "Git tag matching pattern found. Proceeding with the build..."
               circleci step halt
+              exit 0
             else
               echo "No Git tag matching pattern found. Exiting..."
-              circleci step halt           
+              circleci step halt 
+              exit 0          
             fi     
-            circleci step halt        
+            circleci step halt
+            exit 0       
       - run:
           name: Semantic version check completed!  
           command: echo "Check completed! Procceing to build-and-push"      
