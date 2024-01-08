@@ -49,13 +49,15 @@ jobs:
             TAG_PATTERN="v3.3.3"  
             if git tag -l $TAG_PATTERN 2>/dev/null; then
               echo "Git tag matching pattern found. Proceeding with the build..."
+              circleci step halt
             else
               echo "No Git tag matching pattern found. Exiting..."
               circleci step halt
-              circleci step halt
+           
             fi
             circleci step halt
             echo "Semantic Jobs must reach here for full completion!"
+          name: Semantic Check Completed!
   
   build-and-push:
     docker:
