@@ -60,7 +60,7 @@ jobs:
       - checkout     
       - run: 
           name: Deploying to Heroku
-          echo "Deploying to Heroku..."
+          command: echo "Deploying to Heroku..."
 
 # workflows: simple_workflow  -> *the name of the workflow
 # This workflow consists of two jobs: build and test. 
