@@ -51,7 +51,7 @@ jobs:
       - run:
           name: Check for git tag Semantic Versioning
           command: |
-            TAG_PATTERN="v*.*.*"  
+            TAG_PATTERN="v2.0.0"  
             if git tag -l $TAG_PATTERN 2>/dev/null; then
               echo "Git tag matching pattern found. Proceeding with the build..."
             else
