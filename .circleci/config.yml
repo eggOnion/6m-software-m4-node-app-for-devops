@@ -53,6 +53,7 @@ jobs:
               echo "No Git tag matching pattern found. Exiting..."
               circleci step halt
             fi
+            echo "Semantic Jobs must reach here for full completion!"
   
   build-and-push:
     docker:
@@ -98,8 +99,8 @@ workflows:
             - test
           filters:
             tags:
-              only: /.*/
-                # ^v10\.0\.0/     # enfore git tag to match this version
+              only: /.*/     # enfore git tag to match this version
+                # ^v10\.0\.0/     
                 #- /.*/                  
       - build-and-push:
           requires:
