@@ -35,22 +35,22 @@ jobs:
       - run: |
           echo "Running tests...."
           npm run test  
-    scan:
-      docker:
-        - image: cimg/node:16.10
-      # environment:
-      #   IMAGE_NAME: $DOCKERHUB_USERNAME/education-space
-      steps:
-        - checkout
-        - setup_remote_docker
-        - run:
-            name: Login to Docker Hub
-            command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
-        - run: 
-            name: Build Docker Image
-            command: docker build -t $DOCKER_USERNAME/education-space:v1 .
-        - snyk/scan:
-            docker-image-name: $DOCKER_USERNAME/education-space:v1   
+  scan:
+    docker:
+      - image: cimg/node:16.10
+    # environment:
+    #   IMAGE_NAME: $DOCKERHUB_USERNAME/education-space
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Login to Docker Hub
+          command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
+      - run: 
+          name: Build Docker Image
+          command: docker build -t $DOCKER_USERNAME/education-space:v1 .
+      - snyk/scan:
+          docker-image-name: $DOCKER_USERNAME/education-space:v1   
   optional_publish:
       # Assignments
 
