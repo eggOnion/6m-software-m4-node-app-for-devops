@@ -4,7 +4,6 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.1
   docker: circleci/docker@2.1.4
-  snyk: snyk/snyk@1.5.0
 
 # This job uses a Docker image: "cimg/node:16.10" to build a Node.js application. 
 jobs:
@@ -34,62 +33,46 @@ jobs:
           pkg-manager: npm
       - run: |
           echo "Running tests...."
-          npm run test  
-    scan:
-      docker:
-        - image: cimg/node:16.10
-      environment:
-        IMAGE_NAME: $DOCKERHUB_USERNAME/education-space
-      steps:
-        - checkout
-        - setup_remote_docker
-        - run:
-            name: Login to Docker Hub
-            command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
-        - run: 
-            name: Build Docker Image
-            command: docker build -t $DOCKER_USERNAME/education-space:v1 .
-        - snyk/scan:
-            docker-image-name: $DOCKER_USERNAME/education-space:v1   
+          npm run test      
   optional_publish:
       # Assignments
 
   # Specify your tag pattern using wildcards
   # curl -X POST https://https://app.circleci.com/pipelines/github/${DOCKERHUB_USERNAME}/6m-software-m4-node-app-for-devops/128/workflows/${CIRCLE_WORKFLOW_ID}/cancel -H 'Accept: application/json' -u '${CIRCLE_TOKEN}:'
-  # semantic-version-check:
-  #   docker:
-  #     - image: cimg/node:16.10
-  #   steps:
-  #     - checkout   
-  #     - run:
-  #         name: Check for Semantic Versioning
-  #         command: |
-  #           TAG_PATTERN="v3.3.3"  
-  #           if git tag -l $TAG_PATTERN 2>/dev/null; then
-  #             echo "Git tag matching pattern found. Proceeding with the build..."         
-  #           else
-  #             echo "No Git tag matching pattern found. Exiting..."
-  #             circleci step halt 
-  #             exit 0          
-  #           fi                
-  #     - run:
-  #         name: Semantic version check completed!  
-  #         command: echo "Check completed! Procceing to build-and-push"      
+  semantic-version-check:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout   
+      - run:
+          name: Check for Semantic Versioning
+          command: |
+            TAG_PATTERN="v3.3.3"  
+            if git tag -l $TAG_PATTERN 2>/dev/null; then
+              echo "Git tag matching pattern found. Proceeding with the build..."         
+            else
+              echo "No Git tag matching pattern found. Exiting..."
+              circleci step halt 
+              exit 0          
+            fi                
+      - run:
+          name: Semantic version check completed!  
+          command: echo "Check completed! Procceing to build-and-push"      
   
-  # build-and-push:
-  #   docker:
-  #     - image: cimg/node:16.10
-  #   steps:
-  #     - checkout            
-  #     - setup_remote_docker      
-  #     - run:
-  #         name: Log in to Docker Hub
-  #         command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin        
-  #     - run:
-  #         name: Build and Push Docker Image.
-  #         command: |
-  #           docker build -t $DOCKERHUB_USERNAME/build-and-push:latest_v2 .
-  #           docker push $DOCKERHUB_USERNAME/build-and-push:latest_v2
+  build-and-push:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout            
+      - setup_remote_docker      
+      - run:
+          name: Log in to Docker Hub
+          command: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin        
+      - run:
+          name: Build and Push Docker Image.
+          command: |
+            docker build -t $DOCKERHUB_USERNAME/build-and-push:latest_v2 .
+            docker push $DOCKERHUB_USERNAME/build-and-push:latest_v2
     
   deploy-to-Heroku:
     docker:
@@ -114,24 +97,21 @@ workflows:
                 - main      # build the ci pipeline only when git push to main branch            
       - test:
           requires:
-            - build
-      - scan:
+            - build      
+      - semantic-version-check:
           requires:
             - test
-      # - semantic-version-check:
-      #     requires:
-      #       - test
-      #     filters:
-      #       tags:
-      #         only: /.*/     # enfore git tag to match this version
-      #           # ^v10\.0\.0/     
-      #           #- /.*/                  
-      # - build-and-push:
-      #     requires:
-      #       - semantic-version-check          
+          filters:
+            tags:
+              only: /.*/     # enfore git tag to match this version
+                # ^v10\.0\.0/     
+                #- /.*/                  
+      - build-and-push:
+          requires:
+            - semantic-version-check          
       - deploy-to-Heroku:
           requires:
-            - scan
+            - build-and-push
 
 
 
